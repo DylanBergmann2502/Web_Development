@@ -1,0 +1,19 @@
+* {
+    padding: 0;
+    margin:0;
+}
+:root {
+    --text-color: #ccc;
+    --abcde: 1px solid black;
+
+}
+.sec1 p {
+    --text-size: 25px;
+}
+.sec1 p {
+    color: var(--text-color);
+    font-size: var(--text-size);
+}
+.sec2 p {
+    color: var(--text-color);
+}

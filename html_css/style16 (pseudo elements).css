@@ -1,0 +1,42 @@
+
+:root {
+    color: red;
+}
+
+h1:hover {
+    color: blue;
+    padding-left: 50px;
+    font-size:
+}
+
+a:active {
+    color: green;
+}
+/*a:visited {
+    color: red;
+} */
+.list-example-1 p:last-child {
+    color: gray;
+}
+.list-example-2 p:nth-child(2n+0) {
+    color: pink;
+}
+.element-1::first-line {
+    background-color: yellow;
+    color: gray;
+}
+.element-2::first-letter {
+    background-color: green;
+    color: white;
+}
+.element-3::selection {
+    background-color: orange;
+    color: gray;
+}
+.element-4::before {
+    content: "This a paragraph - ";
+
+}
+.element-4::after {
+    content: attr(href);
+}

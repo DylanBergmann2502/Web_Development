@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <p>Here is a list of recipes</p>
+    <table>
+        <thead>
+        <tr>
+            <th>Category name</th>
+            <th>Recipe name</th>
+            <th>More info</th>
+        </tr>
+        </thead>
+        <tboy>
+            {% for recipe in recipes %}
+                <tr>
+                    <td>{{recipe.category.name}}</td>
+                    <td>{{recipe.name}}</td>
+                    <td><a href="{% url 'recipe' recipe.id %}">More Info</a></td>
+                </tr>
+            {% endfor %}
+        </tboy>
+    </table>
+</body>
+</html>

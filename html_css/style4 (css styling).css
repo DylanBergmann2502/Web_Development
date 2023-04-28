@@ -1,0 +1,25 @@
+@font-face {
+    src: url(fonts/Nosifer-Regular.tff);
+    font-family: nos
+}
+h1 {
+    font-family: nos;
+    font-size: 30px;
+    font-style: italic;
+    font-weight: 100; /*thickness of letter*/
+    text-align: left;
+    text-decoration: underline;
+    text-indent: 30px;
+    text-transform: capitalize; /* uppercase, lowercase */
+    color: rgba(77, 0, 255, 1); /* first 3 = color, last = transparency(0->1) */
+    /*letter-spacing: 10px*/
+    word-spacing: 10px;
+}
+.paragraph {
+    font-size: 22px;
+    line-height: 30px;
+    text-indent: 30px;
+    text-align: justify;
+    font-family: 'Lato', sans-serif;
+}
+a {text-decoration:none;}

@@ -1,0 +1,6 @@
+Django==4.1.7
+django_selenium_login==2.0.0
+Pillow==9.4.0
+python-dotenv==1.0.0
+selenium==4.8.2
+seleniumlogin==0.0.4

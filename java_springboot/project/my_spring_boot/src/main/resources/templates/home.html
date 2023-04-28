@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>White Socks Blog</title>
+</head>
+<body>
+    <h1>Hello World</h1>
+    <nav>
+        <th:block th:each="post : ${posts}">
+            <p th:text="{post.title}"></p>
+            <h1 th:text="{post.author}"></h1>
+            <h2 th:text="{post.date_posted}"></h2>
+            <h3 th:text="{post.content}"></h3>
+        </th:block>
+    </nav>
+</body>
+</html>
