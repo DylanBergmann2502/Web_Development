@@ -16,17 +16,13 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.urls import path, include
-from django.views.decorators.cache import cache_page
 from rest_framework_simplejwt import views as jwt_views
 
 from main import views as main_views
 
-CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
-
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('PinocchioInLadiesUnderwear/', admin.site.urls),
 
     # main urls
     path('', main_views.home, name="home"),

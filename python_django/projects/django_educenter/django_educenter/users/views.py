@@ -30,6 +30,7 @@ class StudentRegisterView(SuccessMessageMixin, CreateView):
         context['title'] = "Register"
         return context
 
+
 class LoginView(LoginView):
     template_name = 'users/login.html'
 
@@ -233,8 +234,8 @@ def teacher_update_view(request, pk):
     if request.method == 'POST':
         u_form = UserProfileUpdateForm(request.POST, instance=request.user)
         t_form = TeacherProfileUpdateForm(request.POST,
-                                   request.FILES,
-                                   instance=teacher)
+                                          request.FILES,
+                                          instance=teacher)
         if u_form.is_valid() and t_form.is_valid():
             u_form.save()
             t_form.save()
@@ -247,6 +248,7 @@ def teacher_update_view(request, pk):
     context = {'u_form': u_form, 't_form': t_form, 'teacher': teacher,
                'list_url': list_url, 'list_title': list_title, 'detail_title': detail_title}
     return render(request, 'users/teacher_create_update_form.html', context)
+
 
 # this view is the CBV version of the above,
 # I keep this just for reference

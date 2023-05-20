@@ -1,17 +1,12 @@
 from django.contrib.auth import views as auth_views
 from django.urls import path
-from django.conf import settings
-from django.core.cache.backends.base import DEFAULT_TIMEOUT
-from django.views.decorators.cache import cache_page
 
 from users import views as users_views
 
-CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
-
 urlpatterns = [
     # auth
-    path('register/', cache_page(CACHE_TTL)(users_views.StudentRegisterView.as_view()), name="register"),
-    path('login/', cache_page(CACHE_TTL)(users_views.LoginView.as_view()), name="login"),
+    path('register/', users_views.StudentRegisterView.as_view(), name="register"),
+    path('login/', users_views.LoginView.as_view(), name="login"),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
     path('password-reset/', users_views.PasswordResetView.as_view(), name='password_reset'),
@@ -23,14 +18,14 @@ urlpatterns = [
     path('password-change/done', users_views.PasswordChangeDoneView.as_view(), name='password_change_done'),
 
     # major CRUDs
-    path('majors/', cache_page(CACHE_TTL)(users_views.MajorListView.as_view()), name="major-list"),
+    path('majors/', users_views.MajorListView.as_view(), name="major-list"),
     path('major/new/', users_views.MajorCreateView.as_view(), name='major-create'),
     path('major/<int:pk>/update/', users_views.MajorUpdateView.as_view(), name='major-update'),
     path('major/<int:pk>/delete/', users_views.MajorDeleteView.as_view(), name='major-delete'),
 
     # teacher CRUDs
-    path('teachers/', cache_page(CACHE_TTL)(users_views.TeacherListView.as_view()), name="teacher-list"),
-    path('teacher/<int:pk>/', cache_page(CACHE_TTL)(users_views.TeacherDetailView.as_view()), name="teacher-detail"),
+    path('teachers/', users_views.TeacherListView.as_view(), name="teacher-list"),
+    path('teacher/<int:pk>/', users_views.TeacherDetailView.as_view(), name="teacher-detail"),
     path('teacher/new/', users_views.teacher_create_view, name="teacher-create"),
     path('teacher/<int:pk>/update/', users_views.teacher_update_view, name="teacher-update"),
     # According to django's doc, deleting a teacher(user) may break things due to relationships,
