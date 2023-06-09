@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'app2',
     'app3',
     'django_celery_beat',
+    'django_celery_results',
 ]
 
 MIDDLEWARE = [
@@ -146,6 +147,18 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": 5.0,
     },
 }
+
+CELERY_RESULT_BACKEND = 'django-db'
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "LOCATION": "cachedb",
+    }
+}
+
+CELERY_BROKER_URL = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
+CELERY_RESULT_BACKEND = os.environ.get("CELERY_BROKER", "redis://redis:6379/0")
 
 """ crontab() Execute every minute.
 crontab(minute=0, hour=0) Execute daily at midnight.
