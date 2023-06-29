@@ -32,4 +32,5 @@ class User(UserBase):
     items: list[Item] = []
 
     class Config:
+        # eagerly fetch items in relationships
         orm_mode = True
