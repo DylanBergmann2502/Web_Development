@@ -4,7 +4,7 @@ from uuid import UUID
 from xml.etree.ElementInclude import include
 
 from fastapi import FastAPI, Query, Path, Body, Cookie, Header, status, Form, File, UploadFile, HTTPException, Request, \
-    Depends
+    Depends, BackgroundTasks
 from fastapi.encoders import jsonable_encoder
 from fastapi.exception_handlers import http_exception_handler, request_validation_exception_handler
 from fastapi.exceptions import RequestValidationError
@@ -16,6 +16,7 @@ from passlib.context import CryptContext
 from pydantic import BaseModel, Field, HttpUrl, EmailStr
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
+from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -797,23 +798,23 @@ app = FastAPI()
 #     if x_token != "fake-super-secret-token":
 #         raise HTTPException(status_code=400, detail="X-Token header invalid")
 #
-# 
+#
 # async def verify_key(x_key: str = Header(...)):
 #     if x_key != "fake-super-secret-key":
 #         raise HTTPException(status_code=400, detail="X-Key header invalid")
 #     return x_key
-# 
+#
 # @app.get("/items/", dependencies=[Depends(verify_token), Depends(verify_key)])
 # async def read_items():
 #     return [{"item": "Foo"}, {"item": "Bar"}]
-# 
-# 
+#
+#
 # @app.get("/users/", dependencies=[Depends(verify_token), Depends(verify_key)])
 # async def read_users():
 #     return [{"username": "Rick"}, {"username": "Morty"}]
-# 
+#
 # # app = FastAPI(dependencies=[Depends(verify_token), Depends(verify_key)])
-# 
+#
 # # @app.get("/items/")
 # # async def read_items():
 # #     return [{"item": "Foo"}, {"item": "Bar"}]
@@ -1025,18 +1026,141 @@ app = FastAPI()
 #     return [{"item_id": "Foo", "owner": current_user.username}]
 
 ## Part 28 - Middleware and CORS
-class MyMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next):
-        start_time = datetime.now()
-        response = await call_next(request)
-        process_time = datetime.now() - start_time
-        response.headers["X-Process-Time"] = str(process_time)
-        return response
+# class MyMiddleware(BaseHTTPMiddleware):
+#     async def dispatch(self, request: Request, call_next):
+#         start_time = datetime.now()
+#         response = await call_next(request)
+#         process_time = datetime.now() - start_time
+#         response.headers["X-Process-Time"] = str(process_time)
+#         return response
+#
+# origins = ["http://localhost:8000", "http://localhost:3000"]
+# app.add_middleware(MyMiddleware)
+# app.add_middleware(CORSMiddleware, allow_origins=origins)
+#
+# @app.get("/blah")
+# async def blah():
+#     return {"hello": "world"}
 
-origins = ["http://localhost:8000", "http://localhost:3000"]
-app.add_middleware(MyMiddleware)
-app.add_middleware(CORSMiddleware, allow_origins=origins)
+## Part 31 - Background Tasks
+# import time
+#
+# def write_notification(email: str, message=""):
+#     with open("log.txt", mode="a") as email_file:
+#         content = f"notification for {email}: {message}"
+#         time.sleep(5)
+#         email_file.write(content)
+#
+#
+# @app.post("/send-notification/{email}", status_code=202)
+# async def send_notification(email: str, background_tasks: BackgroundTasks):
+#     background_tasks.add_task(write_notification, email, message="some notification")
+#     return {"message": "Notification sent in the background"}
 
-@app.get("/blah")
-async def blah():
-    return {"hello": "world"}
+
+# def write_log(message: str):
+#     with open("log.txt", mode="a") as log:
+#         log.write(message)
+#
+#
+# def get_query(background_tasks: BackgroundTasks, q: str | None = None):
+#     if q:
+#         message = f"found query: {q}\n"
+#         background_tasks.add_task(write_log, message)
+#     return q
+#
+#
+# @app.post("/send-notification/{email}")
+# async def send_notification(
+#     email: str, background_tasks: BackgroundTasks, q: str = Depends(get_query)
+# ):
+#     message = f"message to {email}\n"
+#     background_tasks.add_task(write_log, message)
+#     return {"message": "Message sent", "query": q}
+
+## 32 - Metadata and Docs URLs
+description = """
+ChimichangApp API helps you do awesome stuff. 🚀
+## Items
+You can **read items**.
+## Users
+You will be able to:
+* **Create users** (_not implemented_).
+* **Read users** (_not implemented_).
+"""
+
+tags_metadata = [
+    dict(
+        name="users",
+        description="Operations with users. The **login** logic is also here.",
+    ),
+    dict(
+        name="items",
+        description="Manage items. So _fancy_ they have their own docs.",
+        externalDocs=dict(
+            description="Items external docs", url="https://www.jvp.design"
+        ),
+    ),
+]
+
+
+app = FastAPI(
+    title="ChimichangApp",
+    description=description,
+    version="0.0.1",
+    terms_of_service="http://example.com/terms/",
+    contact=dict(
+        name="Deadpoolio the Amazing",
+        url="http://x-force.example.com/contact",
+        email="dp@x-force.example.com",
+    ),
+    license_info=dict(
+        name="Apache 2.0", url="https://www.apache.org/licenses/LICENSE-2.0.html"
+    ),
+    openapi_tags=tags_metadata,
+    openapi_url="/api/v1/openapi.json",
+    docs_url="/hello-world",
+    redoc_url=None,
+)
+
+
+@app.get("/users", tags=["users"])
+async def get_users():
+    return [dict(name="Harry"), dict(name="Ron")]
+
+
+@app.get("/items/", tags=["items"])
+async def read_items():
+    return [dict(name="wand"), dict(name="flying broom")]
+
+## PART 33
+# app.mount("/static", StaticFiles(directory="static"), name="static")
+fake_secret_token = "coneofsilence"
+fake_db = {
+    "foo": {"id": "foo", "title": "Foo", "description": "There goes my hero"},
+    "bar": {"id": "bar", "title": "Bar", "description": "The bartenders"},
+}
+
+class Item(BaseModel):
+    id: str
+    title: str
+    description: str | None = None
+
+
+@app.get("/items/{item_id}", response_model=Item)
+async def read_main(item_id: str, x_token: str = Header()):
+    if x_token != fake_secret_token:
+        raise HTTPException(status_code=400, detail="Invalid X-Token header")
+    if item_id not in fake_db:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return fake_db[item_id]
+
+
+@app.post("/items/", response_model=Item)
+async def create_item(item: Item, x_token: str = Header()):
+    if x_token != fake_secret_token:
+        raise HTTPException(status_code=400, detail="Invalid X-Token header")
+    if item.id in fake_db:
+        raise HTTPException(status_code=400, detail="Item already exists")
+    fake_db[item.id] = item
+    return item
