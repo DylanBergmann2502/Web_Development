@@ -1,0 +1,14 @@
+@font-face {
+    font-family: 'Strengthen';
+    src: url('./Strengthen.ttf') format('ttf'),
+        url('./StrengthenFilled.ttf') format('ttf');
+    font-weight: 600;
+    font-style: normal;
+}
+
+
+.hello {
+    color: red;
+    font-family: 'Strengthen';
+    background: url('./leblanc.jpg');
+}
