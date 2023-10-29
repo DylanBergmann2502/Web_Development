@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 9: Parent-Child State Communication</title>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-full grid place-items-center bg-gray-800 text-white">
+    <div id="app">
+        <app-button :processing="true">Submit</app-button>
+    </div>
+
+    <script type="module">
+        import App from "./js/components9/App.js"
+
+        // Parent->child: use props
+        // Child->parent: use events
+        Vue.createApp(App).mount('#app')
+    </script>
+</body>
+</html>

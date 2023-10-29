@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 2: Attribute binding and Event Handling</title>
+    <script src="https://unpkg.com/vue@3"></script>
+    <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            display: grid;
+            place-items: center;
+        }
+
+        .text-red {
+            color: red;
+        }
+
+        .text-green {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- v-bind:class => :class, v-on:click => @click -->
+        <button :class="active ? 'text-red' : 'text-green'" @click="toggle">Click me</button>
+    </div>
+    <script>
+        Vue.createApp({
+            data() {
+                return {
+                    // buttonClasses: 'text-green',
+                    active: false
+                }
+            },
+
+            // This is called the option api
+            methods: {
+                toggle() {
+                    alert('toggle');
+                    this.active = ! this.active;
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson 12a: Deeper Look At "v-model"</title>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-full grid place-items-center bg-gray-800">
+    <div id="app">
+        <!-- this is the full form of v-model="name" -->
+        <input type="text" :value="name" @input="name = $event.target.value">
+    </div>
+
+    <script type="module">
+        Vue.createApp({
+            data() {
+                return {
+                    name: '',
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>
